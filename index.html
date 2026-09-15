@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mess Meal Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Mess Meal Manager</p>
+      <h1>Mess Meal Management System</h1>
+    </div>
+    <div class="month-box">
+      <label for="monthFilter">Month / Mash</label>
+      <input type="month" id="monthFilter">
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <nav class="tabs" aria-label="Main sections">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="members">Members</button>
+      <button class="tab-btn" data-tab="meals">Meals</button>
+      <button class="tab-btn" data-tab="expenses">Bazar</button>
+      <button class="tab-btn" data-tab="stock">Stock</button>
+      <button class="tab-btn" data-tab="bua">Bua Bill</button>
+      <button class="tab-btn" data-tab="other">Other Exp.</button>
+      <button class="tab-btn" data-tab="deposits">Deposits</button>
+      <button class="tab-btn" data-tab="bill">Monthly Bill</button>
+      <button class="tab-btn" data-tab="backup">Backup</button>
+    </nav>
+
+    <section id="dashboard" class="tab-panel active">
+      <div id="dashboardHero" class="dashboard-hero"></div>
+      <div class="dashboard-stats" id="dashboardCards"></div>
+      <div class="dashboard-grid">
+        <article class="dashboard-panel balance-panel">
+          <div class="section-title">
+            <h2>Member Balance Board</h2>
+            <span>Meal, due, advance</span>
+          </div>
+          <div id="dashboardDueRows" class="member-balance-list"></div>
+        </article>
+        <article class="dashboard-panel stock-panel">
+          <div class="section-title">
+            <h2>Low Stock Radar</h2>
+            <span>Kom stock</span>
+          </div>
+          <div id="lowStockList" class="stock-radar-list"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="members" class="tab-panel">
+      <article class="card">
+        <div class="section-title">
+          <h2>Member Management</h2>
+          <span>Add, edit, active/inactive</span>
+        </div>
+        <form id="memberForm" class="form-grid">
+          <input type="hidden" id="memberId">
+          <label>Name / Nam
+            <input type="text" id="memberName" placeholder="Example: Rahim" required>
+          </label>
+          <label>Phone
+            <input type="text" id="memberPhone" placeholder="Optional">
+          </label>
+          <label>Status
+            <select id="memberActive">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </label>
+          <button type="submit" class="primary-btn">Save Member</button>
+        </form>
+      </article>
+      <article class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="memberRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="meals" class="tab-panel">
+      <article class="card">
+        <div class="section-title">
+          <h2>Daily Meal Entry</h2>
+          <span>Breakfast, lunch, dinner</span>
+        </div>
+        <form id="mealForm" class="form-grid">
+          <input type="hidden" id="mealId">
+          <label>Date
+            <input type="date" id="mealDate" required>
+          </label>
+          <label>Member
+            <select id="mealMember" required></select>
+          </label>
+          <label>Breakfast Menu
+            <select id="mealBreakfastType">
+              <option value="">No Breakfast</option>
+              <option value="khichuri">Khichuri + Dim</option>
+              <option value="porota">2 Porota + Dim + Dal</option>
+            </select>
+          </label>
+          <label>Breakfast Count
+            <input type="number" id="mealBreakfast" min="0" step="0.5" value="0">
+          </label>
+          <label>Lunch Menu
+            <select id="mealLunchType">
+              <option value="">No Lunch</option>
+              <option value="fish">Fish Meal</option>
+              <option value="meat">Meat Meal</option>
+            </select>
+          </label>
+          <label>Lunch Count
+            <input type="number" id="mealLunch" min="0" step="0.5" value="0">
+          </label>
+          <label>Dinner Menu
+            <select id="mealDinnerType">
+              <option value="">No Dinner</option>
+              <option value="fish">Fish Meal</option>
+              <option value="meat">Meat Meal</option>
+            </select>
+          </label>
+          <label>Dinner Count
+            <input type="number" id="mealDinner" min="0" step="0.5" value="0">
+          </label>
+          <button type="submit" class="primary-btn">Save Meal</button>
+        </form>
+      </article>
+      <article class="card">
+        <div class="section-title">
+          <h2>Monthly Meal List</h2>
+          <span id="mealTotalLabel">Total: 0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Member</th>
+                <th>Breakfast Menu</th>
+                <th>Breakfast</th>
+                <th>Lunch Menu</th>
+                <th>Lunch</th>
+                <th>Dinner Menu</th>
+                <th>Dinner</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="mealRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="expenses" class="tab-panel">
+      <article class="card">
+        <div class="section-title">
+          <h2>Bazar / Expense</h2>
+          <span>Daily market cost</span>
+        </div>
+        <form id="expenseForm" class="form-grid">
+          <input type="hidden" id="expenseId">
+          <label>Date
+            <input type="date" id="expenseDate" required>
+          </label>
+          <label>Buyer Name
+            <input type="text" id="expenseBuyer" required>
+          </label>
+          <label>Item Name
+            <input type="text" id="expenseItem" placeholder="Chal, dal, fish..." required>
+          </label>
+          <label>Amount
+            <input type="number" id="expenseAmount" min="0" step="0.01" required>
+          </label>
+          <label>Note
+            <input type="text" id="expenseNote" placeholder="Optional">
+          </label>
+          <button type="submit" class="primary-btn">Save Expense</button>
+        </form>
+      </article>
+      <article class="card">
+        <div class="section-title">
+          <h2>Monthly Bazar List</h2>
+          <span id="expenseTotalLabel">Total: 0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Buyer</th>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="expenseRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="stock" class="tab-panel">
+      <div class="two-column">
+        <article class="card">
+          <div class="section-title">
+            <h2>Add Stock</h2>
+          </div>
+          <form id="stockForm" class="form-grid single">
+            <input type="hidden" id="stockId">
+            <label>Item
+              <input type="text" id="stockItem" list="stockSuggestions" placeholder="chal" required>
+              <datalist id="stockSuggestions">
+                <option value="Chal">
+                <option value="Dal">
+                <option value="Tel">
+                <option value="Dim">
+                <option value="Ata">
+                <option value="Mach">
+                <option value="Mangsho">
+                <option value="Kacha Bazar Moshla">
+              </datalist>
+            </label>
+            <label>Quantity
+              <input type="number" id="stockQuantity" min="0" step="0.01" required>
+            </label>
+            <label>Unit
+              <input type="text" id="stockUnit" list="unitSuggestions" placeholder="kg / gram / ml / liter / piece" required>
+              <datalist id="unitSuggestions">
+                <option value="Kg">
+                <option value="Gram">
+                <option value="Ml">
+                <option value="Liter">
+                <option value="Packet">
+                <option value="Piece">
+              </datalist>
+            </label>
+            <label>Price
+              <input type="number" id="stockPrice" min="0" step="0.01" value="0">
+            </label>
+            <label>Date
+              <input type="date" id="stockDate" required>
+            </label>
+            <button type="submit" class="primary-btn">Add Stock</button>
+          </form>
+        </article>
+        <article class="card">
+          <div class="section-title">
+            <h2>Use Stock</h2>
+          </div>
+          <form id="stockUseForm" class="form-grid single">
+            <label>Item
+              <select id="useStockItem" required></select>
+            </label>
+            <label>Used Quantity
+              <input type="number" id="useStockQuantity" min="0" step="0.01" required>
+            </label>
+            <label>Date
+              <input type="date" id="useStockDate" required>
+            </label>
+            <button type="submit" class="primary-btn">Save Usage</button>
+          </form>
+        </article>
+      </div>
+      <article class="card">
+        <div class="section-title">
+          <h2>Current Stock</h2>
+          <span>Low stock below 2 units</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Current Qty</th>
+                <th>Unit</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="stockRows"></tbody>
+          </table>
+        </div>
+      </article>
+      <article class="card">
+        <div class="section-title">
+          <h2>Stock Usage History</h2>
+          <span>Used items</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="stockUseRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="bua" class="tab-panel">
+      <article class="card">
+        <div class="section-title">
+          <h2>Bua / Maid Bill</h2>
+          <span>Equal split among active members</span>
+        </div>
+        <form id="buaForm" class="form-grid">
+          <label>Month
+            <input type="month" id="buaMonth" required>
+          </label>
+          <label>Total Bua Bill
+            <input type="number" id="buaAmount" min="0" step="0.01" required>
+          </label>
+          <label>Note
+            <input type="text" id="buaNote" placeholder="Optional">
+          </label>
+          <button type="submit" class="primary-btn">Save Bua Bill</button>
+        </form>
+      </article>
+      <article class="card">
+        <div class="section-title">
+          <h2>Member Bua Share</h2>
+          <span id="buaShareLabel">Share: 0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Status</th>
+                <th>Share</th>
+              </tr>
+            </thead>
+            <tbody id="buaRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="deposits" class="tab-panel">
+      <article class="card">
+        <div class="section-title">
+          <h2>Deposit / Payment</h2>
+          <span>Member payment entry</span>
+        </div>
+        <form id="depositForm" class="form-grid">
+          <input type="hidden" id="depositId">
+          <label>Date
+            <input type="date" id="depositDate" required>
+          </label>
+          <label>Member
+            <select id="depositMember" required></select>
+          </label>
+          <label>Amount
+            <input type="number" id="depositAmount" min="0" step="0.01" required>
+          </label>
+          <label>Note
+            <input type="text" id="depositNote" placeholder="Optional">
+          </label>
+          <button type="submit" class="primary-btn">Save Deposit</button>
+        </form>
+      </article>
+      <article class="card">
+        <div class="section-title">
+          <h2>Monthly Deposits</h2>
+          <span id="depositTotalLabel">Total: 0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Member</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="depositRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="other" class="tab-panel">
+      <article class="card">
+        <div class="section-title">
+          <h2>Other Expenses</h2>
+          <span>Gas, internet, cleaner items</span>
+        </div>
+        <form id="otherForm" class="form-grid">
+          <input type="hidden" id="otherId">
+          <label>Date
+            <input type="date" id="otherDate" required>
+          </label>
+          <label>Expense Name
+            <input type="text" id="otherName" placeholder="Gas bill" required>
+          </label>
+          <label>Amount
+            <input type="number" id="otherAmount" min="0" step="0.01" required>
+          </label>
+          <label>Note
+            <input type="text" id="otherNote" placeholder="Optional">
+          </label>
+          <button type="submit" class="primary-btn">Save Other Expense</button>
+        </form>
+      </article>
+      <article class="card">
+        <div class="section-title">
+          <h2>Monthly Other Expense List</h2>
+          <span id="otherTotalLabel">Total: 0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="otherRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="bill" class="tab-panel">
+      <article class="card print-area" id="printArea">
+        <div class="section-title">
+          <h2>Monthly Bill Calculation</h2>
+          <span id="billMonthLabel"></span>
+        </div>
+        <div class="bill-stats" id="billStats"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Meals</th>
+                <th>Meal Cost</th>
+                <th>Bua Share</th>
+                <th>Other Exp.</th>
+                <th>Deposit</th>
+                <th>Final</th>
+              </tr>
+            </thead>
+            <tbody id="billRows"></tbody>
+          </table>
+        </div>
+      </article>
+      <button id="printBtn" class="primary-btn wide-btn">Print Monthly Bill</button>
+    </section>
+
+    <section id="backup" class="tab-panel">
+      <div class="two-column">
+        <article class="card">
+          <div class="section-title">
+            <h2>Export / Backup</h2>
+            <span>JSON file save korun</span>
+          </div>
+          <p class="help-text">Export korle apnar sob data ekta JSON file hisebe download hobe.</p>
+          <button id="exportBtn" class="primary-btn">Export Data as JSON</button>
+        </article>
+        <article class="card">
+          <div class="section-title">
+            <h2>Import / Restore</h2>
+            <span>JSON file upload korun</span>
+          </div>
+          <input type="file" id="importFile" accept="application/json">
+          <button id="importBtn" class="primary-btn">Import Data</button>
+        </article>
+      </div>
+      <article class="card danger-card">
+        <div class="section-title">
+          <h2>Reset Data</h2>
+          <span>Careful</span>
+        </div>
+        <p class="help-text">Reset korle browser localStorage theke ei app-er sob data delete hoye jabe.</p>
+        <button id="resetBtn" class="danger-btn">Reset All Data</button>
+      </article>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
